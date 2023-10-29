@@ -8,7 +8,7 @@ module.exports = async () =>{
             // useCreateIndex: true,
             // useFindAndModify: false
         });
-        console.log(`Connected to MongoDB at ${process.env.DB_URI}`);
+        console.log(`Connected to MongoDB at `+`${process.env.DB_URI}`.split('://')[0]);
     }
     catch(err){
         console.log(err);
