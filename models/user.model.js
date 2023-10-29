@@ -8,10 +8,10 @@ const userSchema = mongoose.Schema({
     email:{
         type:String,
         required:true,
-        validate:{
-            validator : function (el) {return regPattern.test(el)},
-        },
-        message:'provide a valid email adress.',
+        validate:[
+            function (el) {return regPattern.test(el)},
+            'provide a valid email adress.'
+        ],
         unique:true
     
     },

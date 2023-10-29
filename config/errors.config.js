@@ -1,6 +1,9 @@
+const { json } = require('body-parser');
 const errorObj = require('../models/error.model');
 
 module.exports = (err,req,res,next) =>{
+
+    // console.log(err);
 
     if (err.code === 11000) err=handleDuplicateError(err);
     if (err.name === 'ValidationError') err=handleValidationError(err);
@@ -8,12 +11,20 @@ module.exports = (err,req,res,next) =>{
     err.statusCode = err.statusCode || 500;
     err.message = err.message || 'server failure';
 
-    res.status(err.statusCode).json({
+    console.log(JSON.stringify({
         status:`${err.statCode}`.startsWith('4') ?'fail':'error',
         message:err.message,
         stack:err.stack,
         err
-    });
+    }));
+    res.set('Content-Type: Text/plain');
+    
+    res.status(err.statusCode).send(`${JSON.stringify({
+        status:`${err.statCode}`.startsWith('4') ?'fail':'error',
+        message:err.message,
+        stack:err.stack,
+        err
+    })}`);
     
 }
 
