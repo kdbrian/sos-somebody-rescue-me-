@@ -5,7 +5,7 @@ const consSchema = mongoose.Schema({
         type:mongoose.Schema.ObjectId,
         ref:'Users',
         validate:{
-            validator: function(){return mongoose.isValidObjectId()},
+            validator: function(el){return mongoose.isValidObjectId(el.toString())},
             message: 'Invalid user info please contact admin'
         }
     },
@@ -13,7 +13,7 @@ const consSchema = mongoose.Schema({
     description:{
         type:String,
         maxLength: 120,
-        minLength: 5,
+        // minLength: 5,
         required: true,
         trim:true,
         lowercase:true
