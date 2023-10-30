@@ -1,5 +1,6 @@
 const {SMS}  = require('../config/at.config');
 const userModel = require('../models/user.model');
+const alertModel = require('../models/alert.model');
 const consultationModel = require('../models/consultation.model');
 const catchAsync = require('../util/catchAsync');
 const promisify = require('promisify');
@@ -116,8 +117,8 @@ exports.helloWorld = catchAsync(async (req, res, next) => {
 
         if(user != null){
             // console.log(_cons);
-            resp = `CON 1. Consltation\n2. Emergency \n3. Call for ambulance \n4. SOS `+
-                    `\n 5. Track order`+
+            resp = `CON 1. Consltation\n2. Emergency \n3. Call for ambulance`+
+                    `\n 4. Track order`+
                     `\n0. Quit`
         }else{
             resp = `END Invalid credentials or disabled account`
@@ -137,7 +138,18 @@ exports.helloWorld = catchAsync(async (req, res, next) => {
                 resp = `CON please fill out the details to get a doctor assigned`
                 break;
 
-            case '5':
+            //! Emergency
+            case '2':
+                break;
+
+            //! Call for ambulance
+            case '3':
+                // const _alarm = await alertModel.create({setBy:})
+                //USE geolocation fettch current user location data and poll it as an alert to DB with a high priority
+                break;
+
+
+            case '4':
                 resp = `CON Enter the tracking id`
                 break
         
@@ -151,6 +163,7 @@ exports.helloWorld = catchAsync(async (req, res, next) => {
         // console.log(`choice ${text.split('*')[2]}`);
 
         switch(text.split('*')[2]){
+            //! create a consultation/appointment
             case '1':
                 const desc = text.split('*')[text.split('*').length -1]
                 // console.log(text.split('*')[text.split('*').length -1]);
@@ -174,7 +187,9 @@ exports.helloWorld = catchAsync(async (req, res, next) => {
                         resp = `END Error while processing request please try again later.${err}`
                     });
                 }
-                break;
+            break;
+
+            //! Track order
             case '5':
                 // console.log("here 1");
                 const cons_id = text.split('*')[text.split('*').length -1];
