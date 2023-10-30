@@ -25,11 +25,11 @@ const userSchema = mongoose.Schema({
     phoneNumber:{
         type:String,
         required:true,
-        validate:{
-            validator: function(el) {return phonePattern.test(el)},
-            message:"Provide a valid kenyan number",
-            unique:true
-        }
+        validate:[
+            function(el) {return phonePattern.test(el)},
+            "Provide a valid kenyan number"
+        ],
+        unique:true
     },
 
     dateJoined:{
@@ -42,5 +42,13 @@ const userSchema = mongoose.Schema({
         default:true
     }
 });
+
+//delete user cons on account delete
+
+//return only active users
+userSchema.pre(/^find/, async function(next){
+    this.find({isActive:{$ne:false}});
+    next();
+})
 
 module.exports = mongoose.model('Users', userSchema);
