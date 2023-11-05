@@ -10,21 +10,16 @@ module.exports = (err,req,res,next) =>{
 
     err.statusCode = err.statusCode || 500;
     err.message = err.message || 'server failure';
-
-    console.log(JSON.stringify({
-        status:`${err.statCode}`.startsWith('4') ?'fail':'error',
-        message:err.message,
-        stack:err.stack,
-        err
-    }));
-    res.set('Content-Type: Text/plain');
     
-    res.status(err.statusCode).send(`${JSON.stringify({
-        status:`${err.statCode}`.startsWith('4') ?'fail':'error',
-        message:err.message,
-        stack:err.stack,
-        err
-    })}`);
+    if(process.env.NODE_ENV === 'development')
+        res.status(err.statusCode).json({
+            status:`${err.statCode}`.startsWith('4') ?'fail':'error',
+            message:err.message,
+            stack:err.stack,
+            err
+        });
+    else
+        res.status(err.statCode).json({message:err.message})
     
 }
 
