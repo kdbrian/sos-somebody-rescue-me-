@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-
+const jwt = require('jsonwebtoken');
 const regPattern = /\b[\w.-]+@s\.karu\.ac\.ke\b/g
 const phonePattern = /^(?:\+254|0)[17]\d{8}$/
 
@@ -50,5 +50,11 @@ userSchema.pre(/^find/, async function(next){
     this.find({isActive:{$ne:false}});
     next();
 })
+
+userSchema.methods.signToken = async function(){
+    const user = this;
+    const token = jwt.sign({_id:user._id.toString()}, process.env.JWT_SECRET);
+    return token;
+}
 
 module.exports = mongoose.model('Users', userSchema);
